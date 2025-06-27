@@ -10,21 +10,21 @@ import (
 func AuthRegister(ctx *gin.Context) {
 	var tempData models.User
 
-	err := ctx.ShouldBindJSON(&tempData); 
-	
+	err := ctx.ShouldBindJSON(&tempData)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.Response{
 			Success: false,
-			Message: "Validasi input gagal",
-			Error:   err.Error(), 
+			Message: "Validasi invalid!",
+			Error:   err.Error(),
 		})
 		return
 	}
 
-	if err := models.HandleRegister(tempData); err != nil {
+	userId, err := models.HandleRegister(tempData)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.Response{
 			Success: false,
-			Message: "User sudah terdaftar atau registrasi gagal",
+			Message: "User already Registered!",
 			Error:   err.Error(),
 		})
 		return
@@ -32,6 +32,7 @@ func AuthRegister(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, models.Response{
 		Success: true,
-		Message: "Registrasi berhasil",
+		Message: "Registrasi Successfully!",
+		Result:  userId,
 	})
 }
