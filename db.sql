@@ -11,14 +11,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sessions (
-    id SERIAL PRIMARY KEY,
-    token VARCHAR(255) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expired_at TIMESTAMP,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE
-);
-
 CREATE TABLE payment_methods (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULLj
@@ -39,3 +31,6 @@ CREATE TABLE wallets (
     balance DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
     user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
+
+SELECT * FROM users;
+

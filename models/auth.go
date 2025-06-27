@@ -5,7 +5,6 @@ import (
 	"context"
 	"strconv"
 )
-
 type User struct {
 	UserId  int    `db:"id" json:"userId"` 
 	Fullname string `db:"fullname" json:"fullname"`
@@ -60,7 +59,9 @@ func FindUserByEmail(email string) (User, error) {
 
 	row := conn.QueryRow(
 		context.Background(),
-		`SELECT id, fullname, email, phone, password, pin FROM users WHERE email = $1`,
+		`
+		SELECT id, fullname, email, phone, password, pin FROM users WHERE email = $1
+		`,
 		email,
 	)
 
@@ -68,4 +69,3 @@ func FindUserByEmail(email string) (User, error) {
 	
 	return user, nil
 }
-

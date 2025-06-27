@@ -3,9 +3,40 @@ package controllers
 import (
 	"be-weeklytask/models"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
+
+func AuthRegister(ctx *gin.Context) {
+	var tempData models.User
+
+	err := ctx.ShouldBindJSON(&tempData)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Validasi invalid!",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	userId, err := models.HandleRegister(tempData)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "User already Registered!",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Registrasi Successfully!",
+		Result:  userId,
+	})
+}
 
 func AuthLogin(ctx *gin.Context) {
 	godotenv.Load()
@@ -36,7 +67,7 @@ func AuthLogin(ctx *gin.Context) {
 		return
 	}
 
-	token, err := generateToken(user.UserId) 
+	token, err := generateToken(user.UserId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, models.Response{
 			Success: false,
@@ -50,5 +81,5 @@ func AuthLogin(ctx *gin.Context) {
 		Message: "Login successful",
 		Result:  token,
 	})
-}
 
+}

@@ -5,7 +5,6 @@
   ```mermaid
   erDiagram
   direction LR
-  users ||--o{ sessions : "has"
   users ||--o{ wallets : "owns"
   users ||--o{ transactions : "initiates"
   payment_methods ||--o{ transactions : "used_in"
@@ -20,14 +19,6 @@
     pin int
     created_at timestamp
     updated_at timestamp
-  }
-
-  sessions {
-    id int PK
-    token string 
-    created_at timestamp
-    expired_at timestamp
-    user_id int FK
   }
 
   payment_methods {
