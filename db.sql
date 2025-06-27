@@ -1,3 +1,4 @@
+-- Active: 1750752675497@@127.0.0.1@5432@dbuserscrud
 -- E wallet
 
 CREATE TABLE users (
