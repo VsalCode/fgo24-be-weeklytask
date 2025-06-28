@@ -69,3 +69,4 @@ func FindUserByEmail(email string) (User, error) {
 	
 	return user, nil
 }
+
