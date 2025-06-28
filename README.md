@@ -3,44 +3,65 @@
   ### ERD
 
   ```mermaid
-  erDiagram
+erDiagram
   direction LR
-  users ||--o{ wallets : "owns"
-  users ||--o{ transactions : "initiates"
-  payment_methods ||--o{ transactions : "used_in"
-  wallets ||--o{ transactions : "affects"
+    users {
+        int id PK
+        string fullname
+        string email
+        string phone
+        string password
+        int pin
+        timestamp created_at
+    }
 
-  users {
-    id int PK
-    fullname string
-    email string
-    phone string
-    password string
-    pin int
-    created_at timestamp
-    updated_at timestamp
-  }
+    balance {
+        int id PK
+        int user_id FK
+        decimal amount
+        timestamp updated_at
+    }
 
-  payment_methods {
-    id int PK
-    name string
-  }
+    transactions {
+        int id PK
+        int user_id FK
+        decimal amount
+        bool success
+        string transaction_type  
+        timestamp created_at
+    }
 
-  wallets {
-    id int PK
-    balance decimal
-    user_id int FK 
-  }
+    topup {
+        int id PK
+        int transaction_id FK
+        decimal topup_amount
+        timestamp topup_date
+        int method_id FK
+    }
 
-  transactions {
-    id int PK
-    amount decimal
-    type string
-    status string
-    user_id int FK
-    payment_method_id int FK
-    wallet_id int FK
-  }
+    payment_method {
+      int id PK
+      string method_name
+    }
+
+    transfers {
+        int transfer_id PK
+        int transaction_id FK
+        int sender_user_id FK
+        int receiver_user_id FK
+        decimal transfer_amount
+        timestamp transfer_date
+    }
+
+    users ||--o| balance: has
+    users ||--o| transactions: initiates
+    transactions ||--o| topup: includes
+    topup |o--|| payment_method : "has"  
+    transactions ||--o| transfers: includes
+    users ||--o| transfers: sender
+    users ||--o| transfers: receiver
+
+
   ```
 
   

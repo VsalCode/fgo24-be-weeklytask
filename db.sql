@@ -1,36 +1,52 @@
--- Active: 1750752675497@@127.0.0.1@5432@dbuserscrud
--- E wallet
-
+-- Active: 1750752675497@@127.0.0.1@5432@ewalletdb
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    fullname VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    phone VARCHAR(30) NOT NULL UNIQUE,
+    fullname VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    pin INT NOT NULL CHECK (pin BETWEEN 1000 AND 9999),
+    pin INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE payment_methods (
+CREATE TABLE balance (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULLj
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    amount DECIMAL(15, 2) DEFAULT 0.00,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TYPE transaction_type AS ENUM ('topup', 'transfer');
+CREATE TYPE list_type_transaction AS ENUM ('topup', 'transfer');
 
 CREATE TABLE transactions (
     id SERIAL PRIMARY KEY,
-    amount DECIMAL(15, 2) NOT NULL CHECK (amount > 0),
-    type transaction_type,
-    payment_method_id INT REFERENCES payment_methods(id) ON DELETE SET NULL,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    amount DECIMAL(15, 2) NOT NULL,
+    success BOOLEAN DEFAULT FALSE,
+    transaction_type list_type_transaction,  
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE wallets (
+CREATE TABLE payment_method (
     id SERIAL PRIMARY KEY,
-    balance DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE
+    method_name VARCHAR(100) NOT NULL
 );
 
-SELECT * FROM users;
+CREATE TABLE topup (
+    id SERIAL PRIMARY KEY,
+    transaction_id INT REFERENCES transactions(id) ON DELETE CASCADE,
+    topup_amount DECIMAL(15, 2) NOT NULL,
+    topup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    method_id INT REFERENCES payment_method(id)
+);
 
+DROP TABLE topup;
+
+CREATE TABLE transfers (
+    transfer_id SERIAL PRIMARY KEY,
+    transaction_id INT REFERENCES transactions(id) ON DELETE CASCADE,
+    sender_user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    receiver_user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    transfer_amount DECIMAL(15, 2) NOT NULL,
+    transfer_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
