@@ -16,6 +16,7 @@ CREATE TABLE balance (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 CREATE TYPE list_type_transaction AS ENUM ('topup', 'transfer');
 
 CREATE TABLE transactions (
