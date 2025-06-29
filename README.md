@@ -1,6 +1,8 @@
-  # Backend E-Wallet
+# E-Wallet Backend
 
-  ### ERD
+This project is a Backend E-Wallet system developed by me to complete a weekly task in the Full-Stack Web Development Bootcamp at Koda Academy. It builds upon a previous E-Wallet project from an earlier weekly task, focusing on creating a robust backend for an E-Wallet application.
+
+## ERD (Entity Relationship Diagram)
 
   ```mermaid
 erDiagram
@@ -54,4 +56,60 @@ erDiagram
   users ||--o{ transfers: "receives"
   ```
 
-  
+## Installation
+1. Clone the repository:
+```
+git clone https://github.com/VsalCode/fgo24-be-weeklytask.git
+cd e-wallet-backend
+```
+
+2. Create a .env file: Add the necessary environment variables in the .env file (e.g., database URL, JWT secret).
+
+3.Install dependencies:
+```
+go mod tidy
+```
+
+4. Run the application:
+```
+go run main.go
+```
+
+## API Documentation
+1. Authentication
+```bash
+POST /auth/register
+POST /auth/login
+```
+2. Users
+```bash
+# update profile
+PUT /users/profile
+# find people 
+GET /users?search=
+# detail user
+GET /users/9
+```
+3. Wallets
+```bash
+GET /wallets/balance
+GET /wallets/records
+```
+4. Transactions
+```bash
+POST /transactions/topup
+POST /transactions/transfer
+GET /transactions/history
+```
+
+## Depedencies
+- Gin Gonic (github.com/gin-gonic/gin)
+- JWT V5 (github.com/golang-jwt/jwt/v5)
+- PGX (github.com/jackc/pgx/v5)
+- Godotenv (github.com/joho/godotenv)
+
+## How To Contribute
+Pull requests are welcome! For major changes, please open an issue first to discuss your proposed changes. 
+
+## License
+This project is licensed under the [MIT](https://opensource.org/license/mit) License
