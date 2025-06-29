@@ -21,6 +21,13 @@ CREATE TABLE payment_method (
     method_name VARCHAR(100) NOT NULL
 );
 
+INSERT INTO payment_method (method_name) VALUES
+('bri'),
+('dana'),
+('bca'),
+('gopay'),
+('ovo');
+
 CREATE TABLE topup (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,

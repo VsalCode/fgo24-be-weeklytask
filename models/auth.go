@@ -5,8 +5,9 @@ import (
 	"context"
 	"strconv"
 )
+
 type User struct {
-	UserId  int    `db:"id" json:"userId"` 
+	UserId   int    `db:"id" json:"userId"`
 	Fullname string `db:"fullname" json:"fullname"`
 	Email    string `db:"email" json:"email" binding:"required,email"`
 	Phone    string `db:"phone" json:"phone"`
@@ -44,6 +45,15 @@ func HandleRegister(user User) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	_, err = conn.Exec(
+		context.Background(),
+		`INSERT INTO wallets (user_id, balance) VALUES ($1, 0)`,
+		userId,
+	)
+
+	if err != nil {
+		return 0, err
+	}
 
 	return userId, nil
 }
@@ -66,7 +76,6 @@ func FindUserByEmail(email string) (User, error) {
 	)
 
 	row.Scan(&user.UserId, &user.Fullname, &user.Email, &user.Phone, &user.Password, &user.Pin)
-	
+
 	return user, nil
 }
-
