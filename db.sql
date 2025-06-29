@@ -9,23 +9,11 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE balance (
+CREATE TABLE wallets (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    amount DECIMAL(15, 2) DEFAULT 0.00,
+    balance DECIMAL(15, 2) DEFAULT 0.00,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE TYPE list_type_transaction AS ENUM ('topup', 'transfer');
-
-CREATE TABLE transactions (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    amount DECIMAL(15, 2) NOT NULL,
-    success BOOLEAN DEFAULT FALSE,
-    transaction_type list_type_transaction,  
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE payment_method (
@@ -35,19 +23,18 @@ CREATE TABLE payment_method (
 
 CREATE TABLE topup (
     id SERIAL PRIMARY KEY,
-    transaction_id INT REFERENCES transactions(id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
     topup_amount DECIMAL(15, 2) NOT NULL,
     topup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    method_id INT REFERENCES payment_method(id)
+    method_id INT REFERENCES payment_method(id),
+    success BOOLEAN DEFAULT FALSE
 );
-
-DROP TABLE topup;
 
 CREATE TABLE transfers (
     transfer_id SERIAL PRIMARY KEY,
-    transaction_id INT REFERENCES transactions(id) ON DELETE CASCADE,
     sender_user_id INT REFERENCES users(id) ON DELETE CASCADE,
     receiver_user_id INT REFERENCES users(id) ON DELETE CASCADE,
     transfer_amount DECIMAL(15, 2) NOT NULL,
-    transfer_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    transfer_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    success BOOLEAN DEFAULT FALSE
 );
