@@ -10,11 +10,17 @@ type TopupRequest struct {
 	Amount float64 `json:"amount" binding:"required"`
 	Method string  `json:"method" binding:"required"`
 }
-
 type TransferRequest struct {
 	ReceiverUserID int     `json:"receiver_user_id" binding:"required"`
 	TransferAmount float64 `json:"transfer_amount" binding:"required"`
 	Notes          string  `json:"notes"`
+}
+type HistoryTransaction struct {
+	ID             int     `json:"id"`
+	Fullname       string  `json:"fullname"`
+	Phone          string  `json:"phone"`
+	TransferAmount float64 `json:"transfer_amount"`
+	Status         string  `json:"status"`
 }
 
 func GetBalance(userId int) (float64, error) {
@@ -132,3 +138,59 @@ func HandleTransfer(userId int, req TransferRequest, senderBalance float64) erro
 
 	return nil
 }
+
+func GetTransactionHistory(userId int) ([]HistoryTransaction, error) {
+	conn, err := utils.DBConnect()
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	rows, err := conn.Query(
+		context.Background(),
+		`
+    SELECT 
+    	t.id,
+      CASE 
+				WHEN t.sender_user_id = $1 THEN u_receiver.fullname
+      	ELSE u_sender.fullname
+      	END AS fullname,
+      CASE 
+				WHEN t.sender_user_id = $1 THEN u_receiver.phone
+      	ELSE u_sender.phone
+      	END AS phone,
+      t.transfer_amount,
+      CASE 
+        WHEN t.sender_user_id = $1 THEN 'Send'
+        ELSE 'Receive'
+        END AS status
+    FROM transfers t
+    JOIN users u_sender ON u_sender.id = t.sender_user_id
+    JOIN users u_receiver ON u_receiver.id = t.receiver_user_id
+    WHERE t.sender_user_id = $1 OR t.receiver_user_id = $1
+    ORDER BY t.transfer_date DESC
+    `,
+		userId,
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var transactions []HistoryTransaction
+	for rows.Next() {
+		var transaction HistoryTransaction
+		err = rows.Scan(&transaction.ID, &transaction.Fullname, &transaction.Phone, &transaction.TransferAmount, &transaction.Status); 
+		
+		if err != nil {
+			return nil, err
+		}
+
+		transactions = append(transactions, transaction)
+	}
+
+	return transactions, nil
+}
+

@@ -38,7 +38,7 @@ CREATE TABLE topup (
 );
 
 CREATE TABLE transfers (
-    transfer_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     sender_user_id INT REFERENCES users(id) ON DELETE CASCADE,
     receiver_user_id INT REFERENCES users(id) ON DELETE CASCADE,
     transfer_amount DECIMAL(15, 2) NOT NULL,

@@ -119,3 +119,31 @@ func Transfer(ctx *gin.Context) {
 		Message: "Transfer successful!",
 	})
 }
+
+
+func HistoryTransactions(ctx *gin.Context) {
+	userId, exist := ctx.Get("userId")
+	if !exist {
+		ctx.JSON(http.StatusUnauthorized, models.Response{
+			Success: false,
+			Message: "Unauthorized!",
+		})
+		return
+	}
+
+	transactions, err := models.GetTransactionHistory(userId.(int))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Failed to get transaction history",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Get Transaction History Successfully!",
+		Result:  transactions,
+	})
+}
