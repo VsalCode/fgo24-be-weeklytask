@@ -42,6 +42,7 @@ erDiagram
       int sender_user_id FK
       int receiver_user_id FK
       decimal transfer_amount
+      string notes
       timestamp transfer_date
       bool success
   }

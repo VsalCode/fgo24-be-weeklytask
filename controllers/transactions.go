@@ -34,6 +34,7 @@ func Balance(ctx *gin.Context) {
 	})
 }
 
+
 func Topup(ctx *gin.Context) {
 	var req models.TopupRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -77,5 +78,44 @@ func Topup(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.Response{
 		Success: true,
 		Message: "Top up successful!",
+	})
+}
+
+
+func Transfer(ctx *gin.Context) {
+	var req models.TransferRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Invalid request",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	userId, exist := ctx.Get("userId")
+	if !exist {
+		ctx.JSON(http.StatusUnauthorized, models.Response{
+			Success: false,
+			Message: "Unauthorized!",
+		})
+		return
+	}
+
+	senderBalance, _ := models.GetBalance(userId.(int))
+
+	err := models.HandleTransfer(userId.(int), req, senderBalance)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Failed to transfer",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Transfer successful!",
 	})
 }

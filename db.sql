@@ -42,6 +42,9 @@ CREATE TABLE transfers (
     sender_user_id INT REFERENCES users(id) ON DELETE CASCADE,
     receiver_user_id INT REFERENCES users(id) ON DELETE CASCADE,
     transfer_amount DECIMAL(15, 2) NOT NULL,
+    notes VARCHAR(255),
     transfer_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     success BOOLEAN DEFAULT FALSE
 );
+
+DROP TABLE transfers;
