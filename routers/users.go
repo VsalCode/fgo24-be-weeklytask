@@ -12,4 +12,5 @@ func usersRouters(r *gin.RouterGroup) {
 	r.GET("/profile", controllers.UserProfile)
 	r.PUT("/profile", controllers.UpdateUserProfile)
 	r.GET("", controllers.ListUsers) 
+	r.GET("/:id", controllers.DetailUser)
 }

@@ -7,6 +7,12 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type UserRetrieved struct {
+	Id       int    `json:"id"`
+	Fullname string `json:"fullname"`
+	Phone    string `json:"phone"`
+}
+
 func FindUserById(userId int) (User, error) {
 	conn, err := utils.DBConnect()
 
@@ -78,7 +84,7 @@ func GetUpdateUser(userId int, user User) (User, error) {
 	return user, nil
 }
 
-func FindUserByName(search string) ([]User, error) {
+func FindUserByName(search string) ([]UserRetrieved, error) {
 	conn, err := utils.DBConnect()
 	if err != nil {
 		return nil, err
@@ -89,13 +95,13 @@ func FindUserByName(search string) ([]User, error) {
 	if search != "" {
 		rows, err = conn.Query(
 			context.Background(),
-			`SELECT id, fullname, email, phone FROM users WHERE fullname ILIKE '%' || $1 || '%'`,
+			`SELECT id, fullname, phone FROM users WHERE fullname ILIKE '%' || $1 || '%'`,
 			search,
 		)
 	} else {
 		rows, err = conn.Query(
 			context.Background(),
-			`SELECT id, fullname, email, phone FROM users`,
+			`SELECT id, fullname, phone FROM users`,
 		)
 	}
 	if err != nil {
@@ -103,10 +109,10 @@ func FindUserByName(search string) ([]User, error) {
 	}
 	defer rows.Close()
 
-	var users []User
+	var users []UserRetrieved
 	for rows.Next() {
-		var user User
-		if err := rows.Scan(&user.UserId, &user.Fullname, &user.Email, &user.Phone); err != nil {
+		var user UserRetrieved
+		if err := rows.Scan(&user.Id, &user.Fullname, &user.Phone); err != nil {
 			return nil, err
 		}
 		users = append(users, user)

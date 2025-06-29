@@ -3,7 +3,7 @@ package controllers
 import (
 	"be-weeklytask/models"
 	"net/http"
-
+	"strconv"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,7 +30,7 @@ func UserProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.Response{
 		Success: true,
 		Message: "Get User Successfully!",
-		Result: user,
+		Result:  user,
 	})
 }
 
@@ -67,7 +67,7 @@ func UpdateUserProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.Response{
 		Success: true,
 		Message: "Profile updated successfully",
-		Result: user,
+		Result:  user,
 	})
 }
 
@@ -85,8 +85,42 @@ func ListUsers(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, models.Response{
-		Success: true,	
+		Success: true,
 		Message: "Users retrieved successfully",
+		Result:  result,
+	})
+}
+
+func DetailUser(ctx *gin.Context) {
+	key := ctx.Param("id")
+	if key == "" {
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "User is not found",
+		})
+	}
+
+	query, _ := strconv.Atoi(key)
+
+	user, err := models.FindUserById(query)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Failed to get user details",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	result := models.UserRetrieved{
+		Id:       user.UserId,
+		Fullname: user.Fullname,
+		Phone:    user.Phone,
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Get user details successfully",
 		Result:  result,
 	})
 }
