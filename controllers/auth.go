@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"be-weeklytask/dto"
 	"be-weeklytask/models"
 	"net/http"
 
@@ -8,8 +9,17 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// @Summary Register a new user
+// @Description Register a new user with email and password
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param user body dto.RegisterRequest true "User registration data"
+// @Success 200 {object} models.Response{result=int} "User ID"
+// @Failure 400 {object} models.Response "Validation error or already registered"
+// @Router /auth/register [post]
 func AuthRegister(ctx *gin.Context) {
-	var tempData models.User
+	var tempData dto.RegisterRequest
 
 	err := ctx.ShouldBindJSON(&tempData)
 	if err != nil {
@@ -38,10 +48,20 @@ func AuthRegister(ctx *gin.Context) {
 	})
 }
 
+// @Summary Login a user
+// @Description Login a user with email and password
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param login body dto.LoginRequest true "User login data"
+// @Success 200 {object} models.Response{result=string} "JWT token"
+// @Failure 400 {object} models.Response "Invalid request payload"
+// @Failure 401 {object} models.Response "Invalid email or password"
+// @Router /auth/login [post]
 func AuthLogin(ctx *gin.Context) {
 	godotenv.Load()
 
-	loginData := models.LoginRequest{}
+	loginData := dto.LoginRequest{}
 	if err := ctx.ShouldBindJSON(&loginData); err != nil {
 		ctx.JSON(http.StatusBadRequest, models.Response{
 			Success: false,
@@ -54,7 +74,7 @@ func AuthLogin(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, models.Response{
 			Success: false,
-			Message: "Invalid email or password!",
+			Message: "Invalid email or pin!",
 		})
 		return
 	}
@@ -62,7 +82,7 @@ func AuthLogin(ctx *gin.Context) {
 	if user.Password != loginData.Password {
 		ctx.JSON(http.StatusUnauthorized, models.Response{
 			Success: false,
-			Message: "Invalid email or password!",
+			Message: "Invalid password!",
 		})
 		return
 	}

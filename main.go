@@ -7,6 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 ) 
 
+// @title           Koda E-Wallet Backend
+// @version         1.0
+// @description     This is the backend service for Koda E-Wallet, providing user authentication, profile management, wallet transactions, and more.
 func main() {
 	db, err := utils.DBConnect()
 

@@ -1,18 +1,13 @@
 package models
 
 import (
+	"be-weeklytask/dto"
 	"be-weeklytask/utils"
 	"context"
 	"strconv"
 )
 
-type LoginRequest struct {
-	Email    string `db:"email" json:"email" binding:"required,email"`
-	Password string `db:"password" json:"password" binding:"required"`
-	Pin      string `db:"pin" json:"pin" binding:"required"`
-}
-
-func HandleRegister(user User) (int, error) {
+func HandleRegister(user dto.RegisterRequest) (int, error) {
 	conn, err := utils.DBConnect()
 	if err != nil {
 		return 0, err
@@ -48,8 +43,8 @@ func HandleRegister(user User) (int, error) {
 	return userId, nil
 }
 
-func FindUserByEmail(email string) (User, error) {
-	var user User
+func FindUserByEmail(email string) (dto.UserLoginData, error) {
+	var user dto.UserLoginData
 
 	conn, err := utils.DBConnect()
 	if err != nil {
@@ -59,13 +54,14 @@ func FindUserByEmail(email string) (User, error) {
 
 	row := conn.QueryRow(
 		context.Background(),
-		`
-		SELECT id, fullname, email, phone, password, pin FROM users WHERE email = $1
-		`,
+		`SELECT id, email, password, pin FROM users WHERE email = $1`,
 		email,
 	)
 
-	row.Scan(&user.UserId, &user.Fullname, &user.Email, &user.Phone, &user.Password, &user.Pin)
+	err = row.Scan(&user.UserId, &user.Email, &user.Password, &user.Pin)
+	if err != nil {
+		return user, err
+	}
 
 	return user, nil
 }

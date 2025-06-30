@@ -14,3 +14,4 @@ type UpdatedUser struct {
 	Password *string `json:"password,omitempty"`
 	Pin      *int `json:"pin,omitempty"`
 }
+

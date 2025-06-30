@@ -1,0 +1,117 @@
+definitions:
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      pin:
+        type: string
+    required:
+    - email
+    - password
+    - pin
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      pin:
+        type: string
+    required:
+    - email
+    - fullname
+    - password
+    - phone
+    - pin
+    type: object
+  models.Response:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+info:
+  contact: {}
+  description: This is the backend service for Koda E-Wallet, providing user authentication,
+    profile management, wallet transactions, and more.
+  title: Koda E-Wallet Backend
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with email and password
+      parameters:
+      - description: User login data
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT token
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "400":
+          description: Invalid request payload
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Invalid email or password
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Login a user
+      tags:
+      - Authentication
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email and password
+      parameters:
+      - description: User registration data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User ID
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                result:
+                  type: integer
+              type: object
+        "400":
+          description: Validation error or already registered
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Register a new user
+      tags:
+      - Authentication
+swagger: "2.0"
