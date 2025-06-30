@@ -119,3 +119,4 @@ func FindUserByName(search string) ([]UserRetrieved, error) {
 	}
 	return users, nil
 }
+

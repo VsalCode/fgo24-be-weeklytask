@@ -8,6 +8,6 @@ import (
 
 func walletsRouters(r *gin.RouterGroup) {
 	r.Use(middlewares.VerifyToken())
-	r.GET("/balance", controllers.Balance)
+	r.GET("", controllers.Balance)
 	r.GET("/records", controllers.FinanceRecords)
 }

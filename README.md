@@ -7,14 +7,14 @@ This project is a Backend E-Wallet system developed by me to complete a weekly t
 |--------|---------------------------|----------------------------|
 | POST   | ```/auth/register```            | Authentication Register    |
 | POST   | ```/auth/login```               | Authentication Login       |
-| PUT    | ```/users/profile```            | Update profile             |
-| GET    | ```/users?search=```            | Find people / List users                |
-| GET    | ```/users/:id```                | Detail user                |
-| GET    | ```/wallets/balance```          | Get wallet balance         |
+| PATCH  | ```/users/profile```            | Update profile             |
+| GET    | ```/users/profile```            | Current User profile       |
+| GET    | ```/users?search=```            | Find people / List users   |
+| GET    | ```/wallets```                  | Get wallet balance         |
 | GET    | ```/wallets/records```          | Get finance records         |
 | POST   | ```/transactions/topup```       | Top up transaction         |
 | POST   | ```/transactions/transfer```     | Transfer transaction       |
-| GET    | ```/transactions/history```      | Get transaction history     |
+| GET    | ```/transactions```             | Get transaction history     |
 
 
 ## ERD (Entity Relationship Diagram)
