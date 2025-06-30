@@ -2,6 +2,21 @@
 
 This project is a Backend E-Wallet system developed by me to complete a weekly task in the Full-Stack Web Development Bootcamp at Koda Academy. It builds upon a previous E-Wallet project from an earlier weekly task, focusing on creating a robust backend for an E-Wallet application.
 
+## API Endpoints Documentation
+| Method | Endpoint                  | Description                |
+|--------|---------------------------|----------------------------|
+| POST   | ```/auth/register```            | Authentication Register    |
+| POST   | ```/auth/login```               | Authentication Login       |
+| PUT    | ```/users/profile```            | Update profile             |
+| GET    | ```/users?search=```            | Find people / List users                |
+| GET    | ```/users/:id```                | Detail user                |
+| GET    | ```/wallets/balance```          | Get wallet balance         |
+| GET    | ```/wallets/records```          | Get finance records         |
+| POST   | ```/transactions/topup```       | Top up transaction         |
+| POST   | ```/transactions/transfer```     | Transfer transaction       |
+| GET    | ```/transactions/history```      | Get transaction history     |
+
+
 ## ERD (Entity Relationship Diagram)
 
   ```mermaid
@@ -73,33 +88,6 @@ go mod tidy
 4. Run the application:
 ```
 go run main.go
-```
-
-## API Documentation
-1. Authentication
-```bash
-POST /auth/register
-POST /auth/login
-```
-2. Users
-```bash
-# update profile
-PUT /users/profile
-# find people 
-GET /users?search=
-# detail user
-GET /users/9
-```
-3. Wallets
-```bash
-GET /wallets/balance
-GET /wallets/records
-```
-4. Transactions
-```bash
-POST /transactions/topup
-POST /transactions/transfer
-GET /transactions/history
 ```
 
 ## Depedencies
