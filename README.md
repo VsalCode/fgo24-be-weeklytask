@@ -7,11 +7,11 @@ This project is a Backend E-Wallet system developed by me to complete a weekly t
 |--------|---------------------------|----------------------------|
 | POST   | ```/auth/register```            | Authentication Register    |
 | POST   | ```/auth/login```               | Authentication Login       |
-| PATCH  | ```/users/profile```            | Update profile             |
-| GET    | ```/users/profile```            | Current User profile       |
-| GET    | ```/users?search=```            | Find people / List users   |
+| PATCH  | ```/profile```            | Update profile             |
+| GET    | ```/profile```            | Current User profile       |
+| GET    | ```/users?search=```            | List users, Find user by name and phone   |
 | GET    | ```/wallets```                  | Get wallet balance         |
-| GET    | ```/wallets/records```          | Get finance records         |
+| GET    | ```/wallets/records```          | Get finance records (balance, income, expense)  |
 | POST   | ```/transactions/topup```       | Top up transaction         |
 | POST   | ```/transactions/transfer```     | Transfer transaction       |
 | GET    | ```/transactions```             | Get transaction history     |
