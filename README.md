@@ -9,6 +9,7 @@ This project is a Backend E-Wallet system developed by me to complete a weekly t
 | POST   | ```/auth/login```               | Authentication Login       |
 | PATCH  | ```/profile```            | Update profile             |
 | GET    | ```/profile```            | Current User profile       |
+| PUT    | ```/profile```            | Update/change Avatar/profile picture       |
 | GET    | ```/users?search=```            | List users, Find user by name and phone   |
 | GET    | ```/wallets```                  | Get wallet balance         |
 | GET    | ```/wallets/records```          | Get finance records (balance, income, expense)  |
@@ -27,9 +28,10 @@ erDiagram
       int id PK
       string fullname
       string email
-      string phone
       string password
       int pin
+      string phone
+      string avatar
       timestamp created_at
   }
 
