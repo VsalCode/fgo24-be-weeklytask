@@ -60,7 +60,7 @@ erDiagram
 1. Clone the repository:
 ```
 git clone https://github.com/VsalCode/fgo24-be-weeklytask.git
-cd e-wallet-backend
+cd fgo24-be-weeklytask
 ```
 
 2. Create a .env file: Add the necessary environment variables in the .env file (e.g., database URL, JWT secret).

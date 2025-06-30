@@ -6,7 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func balanceRouters(r *gin.RouterGroup) {
+func walletsRouters(r *gin.RouterGroup) {
 	r.Use(middlewares.VerifyToken())
-	r.GET("", controllers.Balance)
+	r.GET("/balance", controllers.Balance)
+	r.GET("/records", controllers.FinanceRecords)
 }
