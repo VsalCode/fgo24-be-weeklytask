@@ -55,3 +55,18 @@ func GetUpdateUser(userId int, user dto.UpdatedUser) (dto.UpdatedUser, error) {
     user.Id = userId
     return user, nil
 }
+
+func AddAvatar(userId int, filename string) error {
+    conn, err := utils.DBConnect()
+    if err != nil {
+        return err
+    }
+    defer conn.Close()
+
+    _, err = conn.Exec(
+        context.Background(),
+        `UPDATE users SET avatar = $1 WHERE id = $2`,
+        filename, userId,
+    )
+    return err
+}

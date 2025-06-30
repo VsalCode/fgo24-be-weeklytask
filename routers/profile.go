@@ -10,4 +10,5 @@ func profileRouters(r *gin.RouterGroup) {
 	r.Use(middlewares.VerifyToken())
 	r.GET("", controllers.UserProfile)
 	r.PATCH("", controllers.UpdateUserProfile)
+	r.PUT("", controllers.UploadAvatar)
 }
