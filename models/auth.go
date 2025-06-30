@@ -6,16 +6,6 @@ import (
 	"strconv"
 )
 
-type User struct {
-	UserId   int    `db:"id" json:"userId"`
-	Fullname string `db:"fullname" json:"fullname"`
-	Email    string `db:"email" json:"email" binding:"required,email"`
-	Phone    string `db:"phone" json:"phone"`
-	Password string `db:"password" json:"password" binding:"required"`
-	Pin      string `db:"pin" json:"pin" binding:"required"`
-	// CreatedAt time.Time `db:"created_at" json:"created_at"`
-}
-
 type LoginRequest struct {
 	Email    string `db:"email" json:"email" binding:"required,email"`
 	Password string `db:"password" json:"password" binding:"required"`

@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"be-weeklytask/dto"
 	"be-weeklytask/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 func UserProfile(ctx *gin.Context) {
@@ -34,7 +35,7 @@ func UserProfile(ctx *gin.Context) {
 }
 
 func UpdateUserProfile(ctx *gin.Context) {
-	var user models.User
+	var user dto.UpdatedUser
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, models.Response{
 			Success: false,
